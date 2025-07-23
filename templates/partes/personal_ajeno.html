@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Ajeno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/personal_ajeno.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Parte Operativo Diario</h1>
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo de la Empresa" style="display: block; margin: 10px auto; max-width: 200px;">
+        <h2 style="color: #000000; font-family: Arial, sans-serif; text-align: center;"> {{ usuario | title }}</h2>  <!-- Capitalizado y con estilo como h1 -->
+        <button id="logout">Cerrar Sesión</button>
+    </header>
+
+    <h2>Personal Ajeno</h2>
+    <button class="add-btn">+</button>
+    <div class="add-form" style="display: none;">
+        <form id="personal-ajeno-form">
+            <label>Apellido y Nombre</label>
+            <input type="text" id="apellido_nombre" required>
+
+            <label>Empresa</label>
+            <input type="text" id="empresa" required>
+
+            <label>Motivo</label>
+            <input type="text" id="motivo" required>
+
+            <label>Hora de Ingreso</label>
+            <input type="time" id="hora_ingreso" required>
+
+            <label>Hora de Egreso</label>
+            <input type="time" id="hora_egreso" required>
+
+            <button type="button" class="save-btn">Guardar</button>
+            <button type="button" class="minimize-btn">Minimizar</button>
+        </form>
+    </div>
+
+    <h3>Vista Previa</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Apellido y Nombre</th>
+                <th>Empresa</th>
+                <th>Motivo</th>
+                <th>Hora de Ingreso</th>
+                <th>Hora de Egreso</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="preview-personal-ajeno">
+            <!-- Filas agregadas dinámicamente -->
+        </tbody>
+    </table>
+
+    <button class="prev-btn">Anterior</button>
+    <button class="next-btn">Siguiente</button>
+    <button class="send-btn">Enviar</button>
+    <button class="preview-all-btn">Vista previa</button>
+</body>
+</html>
+</DOCUMENT>

@@ -1,0 +1,72 @@
+/* styles.css - Estilos básicos para la app */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 20px;
+    padding: 0;
+}
+
+header {
+    background-color: #97b313;  /* Cambiado a verde */
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+button {
+    background-color: #97b313;  /* Cambiado a verde */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #7a8f0f;  /* Un verde más oscuro para hover */
+}
+
+.add-btn {
+    font-size: 24px;
+    background-color: #28a745;  /* Mantengo este verde estándar para +, pero puedes cambiar a #97b313 si quieres uniformidad */
+}
+
+.add-form {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+}

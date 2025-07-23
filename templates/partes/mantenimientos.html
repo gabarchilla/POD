@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimientos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/mantenimientos.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Parte Operativo Diario</h1>
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo de la Empresa" style="display: block; margin: 10px auto; max-width: 200px;">
+        <h2 style="color: #000000; font-family: Arial, sans-serif; text-align: center;"> {{ usuario | title }}</h2>  <!-- Capitalizado y con estilo como h1 -->
+        <button id="logout">Cerrar Sesión</button>
+    </header>
+
+    <h2>Mantenimientos</h2>
+    <button class="add-btn">+</button>
+    <div class="add-form" style="display: none;">
+        <form id="mantenimientos-form">
+            <label>Sistema</label>
+            <input type="text" id="sistema" required>
+
+            <label>Componentes</label>
+            <input type="text" id="componentes" required>
+
+            <label>Serie</label>
+            <input type="text" id="serie" required>
+
+            <label>Status</label>
+            <select id="status" required>
+                <option value="">Seleccione status</option>
+                <option value="Ok" style="background-color: green; color: white;">Ok</option>
+                <option value="En Falla" style="background-color: yellow; color: black;">En Falla</option>
+                <option value="Averia" style="background-color: red; color: white;">Averia</option>
+            </select>
+
+            <label>Tarea</label>
+            <input type="text" id="tarea" required>
+
+            <label>Responsable</label>
+            <input type="text" id="responsable" required>
+
+            <label>Comentarios</label>
+            <input type="text" id="comentarios" required>
+
+            <label>Permiso de Trabajo</label>
+            <input type="number" id="permiso_trabajo" required>
+
+            <button type="button" class="save-btn">Guardar</button>
+            <button type="button" class="minimize-btn">Minimizar</button>
+        </form>
+    </div>
+
+    <h3>Vista Previa</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Sistema</th>
+                <th>Componentes</th>
+                <th>Serie</th>
+                <th>Status</th>
+                <th>Tarea</th>
+                <th>Responsable</th>
+                <th>Comentarios</th>
+                <th>Permiso de Trabajo</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="preview-mantenimientos">
+            <!-- Filas agregadas dinámicamente -->
+        </tbody>
+    </table>
+
+    <button class="prev-btn">Anterior</button>
+    <button class="next-btn">Siguiente</button>
+    <button class="send-btn">Enviar</button>
+</body>
+</html>
+</DOCUMENT>

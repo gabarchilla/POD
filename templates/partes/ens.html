@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENS (Energia No Suministrada)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/ens.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Parte Operativo Diario</h1>
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo de la Empresa" style="display: block; margin: 10px auto; max-width: 200px;">
+        <h2 style="color: #000000; font-family: Arial, sans-serif; text-align: center;"> {{ usuario | title }}</h2>  <!-- Capitalizado y con estilo como h1 -->
+        <button id="logout">Cerrar Sesión</button>
+    </header>
+
+    <h2>ENS (Energia No Suministrada)</h2>
+    <button class="add-btn">+ Agregar ENS</button>
+    <div class="add-form" style="display: none;">
+        <form id="ens-form">
+            <label>Parque</label>
+            <select id="parque-ens" required>
+                <option value="">Seleccione parque</option>
+                <!-- Cargado vía JS desde /api/parques -->
+            </select>
+
+            <label>Inversor/Tipo</label>
+            <input type="text" id="inversor" required>
+
+            <label>Inicio (hora)</label>
+            <input type="time" id="inicio" required>
+
+            <label>Fin (hora)</label>
+            <input type="time" id="fin" required>
+
+            <label>Duración (horas)</label>
+            <input type="number" id="duracion" step="0.01" readonly>  <!-- Calculado automáticamente -->
+
+            <label>ENS (MWh)</label>
+            <input type="number" id="ens" step="0.01" required>
+
+            <label>Limitación</label>
+            <select id="limitacion" required>
+                <option value="">Seleccione</option>
+                <option value="Interna">Interna</option>
+                <option value="Externa">Externa</option>
+            </select>
+
+            <label>ID Falla</label>
+            <input type="text" id="id_falla" required>
+
+            <label>Descripción</label>
+            <input type="text" id="descripcion" required>
+
+            <label>Motivo</label>
+            <input type="text" id="motivo" required>
+
+            <label>Factor Parada</label>
+            <input type="text" id="factor_parada" required>
+
+            <label>Tipo de Factor</label>
+            <input type="text" id="tipo_factor" required>
+
+            <label>¿Inicio esta jornada?</label>
+            <div>
+                <input type="radio" id="hoy_si" name="hoy" value="true">
+                <label for="hoy_si">Sí</label>
+                <input type="radio" id="hoy_no" name="hoy" value="false" checked>
+                <label for="hoy_no">No</label>
+            </div>
+
+            <div id="fecha-averia-container" style="display: none;">
+                <label>Fecha de Avería</label>
+                <input type="date" id="fecha_averia">
+            </div>
+
+            <button type="button" class="save-btn">Guardar</button>
+            <button type="button" class="minimize-btn">Minimizar</button>
+        </form>
+    </div>
+
+    <h3>Vista Previa - ENS</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Parque</th>
+                <th>Inversor</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>ENS (MWh)</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="preview-ens">
+            <!-- Filas agregadas dinámicamente -->
+        </tbody>
+    </table>
+
+    <button class="prev-btn">Anterior</button>
+    <button class="next-btn">Siguiente</button>
+    <button class="send-btn">Enviar</button>
+</body>
+</html>
+</DOCUMENT>

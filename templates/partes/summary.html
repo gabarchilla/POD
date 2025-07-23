@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vista Previa Final</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/summary.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Parte Operativo Diario</h1>
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo de la Empresa" style="display: block; margin: 10px auto; max-width: 200px;">
+        <h2 style="color: #000000; font-family: Arial, sans-serif; text-align: center;"> {{ usuario | title }}</h2>
+        <button id="logout">Cerrar Sesión</button>
+    </header>
+
+    <h2>Vista Previa Final - Todos los Datos Cargados</h2>
+
+    <h3>Personal O&M</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Apellido y Nombre</th>
+                <th>Puesto</th>
+                <th>Modalidad</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+            </tr>
+        </thead>
+        <tbody id="preview-personal-om">
+            <!-- Cargado vía JS -->
+        </tbody>
+    </table>
+
+    <h3>Generación - Curvas</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Parque</th>
+                <th>Tipo</th>
+                <th>Curva Path</th>
+            </tr>
+        </thead>
+        <tbody id="preview-curvas">
+            <!-- Cargado vía JS -->
+        </tbody>
+    </table>
+
+    <h3>Generación - Energía Generada</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Parque</th>
+                <th>Tipo</th>
+                <th>Generada (MWh)</th>
+            </tr>
+        </thead>
+        <tbody id="preview-generada">
+            <!-- Cargado vía JS -->
+        </tbody>
+    </table>
+
+    <h3>Generación - Energía Consumida</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Parque</th>
+                <th>Tipo</th>
+                <th>Consumida (MWh)</th>
+            </tr>
+        </thead>
+        <tbody id="preview-consumida">
+            <!-- Cargado vía JS -->
+        </tbody>
+    </table>
+
+    <h3>ENS</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Parque</th>
+                <th>Inversor</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>ENS (MWh)</th>
+            </tr>
+        </thead>
+        <tbody id="preview-ens">
+            <!-- Cargado vía JS -->
+        </tbody>
+    </table>
+
+    <h3>Acciones Operativas</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Parque</th>
+                <th>Hora</th>
+                <th>Ente</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody id="preview-acciones">
+            <!-- Cargado vía JS -->
+        </tbody>
+    </table>
+
+    <h3>Novedades Operativas</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Parque</th>
+                <th>Hora</th>
+                <th>Código</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody id="preview-novedades">
+            <!-- Cargado vía JS -->
+        </tbody>
+    </table>
+
+    <!-- Agrega más secciones si hay más páginas -->
+
+    <button class="prev-btn">Anterior</button>
+    <button id="confirm-btn">Confirmar y Guardar</button>
+</body>
+</html>
+</DOCUMENT>

@@ -1,0 +1,249 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal O&M - Parte Operativo Diario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="container mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-black">Parte Operativo Diario</h1>
+                <h2 id="parque-nombre" class="text-lg font-semibold text-gray-700"></h2>
+            </div>
+            <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Cerrar Sesión</button>
+        </div>
+        <h3 class="text-xl font-semibold mb-4 text-gray-700">Personal O&M</h3>
+        <button id="add-personal-btn" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mb-4">+</button>
+        <div id="personal-form" class="space-y-4 mb-6 hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="apellido_nombre" class="block text-sm font-medium text-gray-700">Apellido y Nombre</label>
+                    <input type="text" id="apellido_nombre" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="puesto" class="block text-sm font-medium text-gray-700">Puesto</label>
+                    <select id="puesto" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                        <option value="">Seleccione puesto</option>
+                        <option value="Operador">Operador</option>
+                        <option value="Técnico de mantenimiento">Técnico de mantenimiento</option>
+                        <option value="Gestor administrativo">Gestor administrativo</option>
+                        <option value="Técnico SSOyA">Técnico SSOyA</option>
+                        <option value="Supervisor">Supervisor</option>
+                        <option value="Jefe de parque">Jefe de parque</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="modalidad" class="block text-sm font-medium text-gray-700">Modalidad</label>
+                    <input type="text" id="modalidad" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="inicio" class="block text-sm font-medium text-gray-700">Inicio</label>
+                    <input type="time" id="inicio" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="fin" class="block text-sm font-medium text-gray-700">Fin</label>
+                    <input type="time" id="fin" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+            </div>
+            <button id="guardar-personal" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Guardar</button>
+        </div>
+        <div id="personal-list" class="space-y-2 mb-6">
+            <h4 class="text-sm font-medium text-gray-700">Vista Previa</h4>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Apellido y Nombre</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Puesto</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Modalidad</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Inicio</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Fin</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personal-preview" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="flex space-x-4">
+            <button id="anterior" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Anterior</button>
+            <button id="siguiente" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Siguiente</button>
+            <button id="enviar" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Enviar</button>
+        </div>
+    </div>
+    <script>
+        // Cargar información del usuario
+        async function loadUserInfo() {
+            const response = await fetch('/api/user_info');
+            const data = await response.json();
+            if (response.ok) {
+                document.getElementById('parque-nombre').textContent = `Parque: ${data.parque_nombre}`;
+                loadPersonal(data.parque_id);
+            } else {
+                window.location.href = '/login';
+            }
+        }
+
+        // Cargar personal O&M
+        async function loadPersonal(parqueId) {
+            const response = await fetch(`/api/personal_ps?parque_id=${parqueId}`);
+            const personal = await response.json();
+            const personalPreview = document.getElementById('personal-preview');
+            personalPreview.innerHTML = '';
+            // Datos de la base de datos (sin botón de eliminación)
+            personal.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.apellido_nombre}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.puesto || 'Sin puesto'}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.modalidad || ''}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.inicio || ''}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.fin || ''}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700"></td>
+                `;
+                personalPreview.appendChild(tr);
+            });
+            // Datos temporales de sessionStorage (con botón de eliminación)
+            const tempData = JSON.parse(sessionStorage.getItem('personal_om') || '[]');
+            tempData.forEach((p, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.apellido_nombre}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.puesto || 'Sin puesto'}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.modalidad || ''}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.inicio || ''}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">${p.fin || ''}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">
+                        <button class="delete-btn bg-red-500 text-white text-xs px-2 py-1 rounded-full hover:bg-red-600" data-index="${index}">-</button>
+                    </td>
+                `;
+                personalPreview.appendChild(tr);
+            });
+            // Agregar manejadores para los botones de eliminación
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const index = button.getAttribute('data-index');
+                    const tempData = JSON.parse(sessionStorage.getItem('personal_om') || '[]');
+                    tempData.splice(index, 1);
+                    sessionStorage.setItem('personal_om', JSON.stringify(tempData));
+                    loadPersonal(parqueId);
+                });
+            });
+        }
+
+        // Mostrar formulario al hacer clic en "+"
+        document.getElementById('add-personal-btn').addEventListener('click', () => {
+            document.getElementById('personal-form').classList.remove('hidden');
+            document.getElementById('add-personal-btn').classList.add('hidden');
+        });
+
+        // Guardar datos en vista previa
+        document.getElementById('guardar-personal').addEventListener('click', () => {
+            const personal = {
+                apellido_nombre: document.getElementById('apellido_nombre').value,
+                puesto: document.getElementById('puesto').value,
+                modalidad: document.getElementById('modalidad').value,
+                inicio: document.getElementById('inicio').value,
+                fin: document.getElementById('fin').value,
+                parque_id: sessionStorage.getItem('parque_id'),
+                fecha_id: sessionStorage.getItem('fecha_id')
+            };
+            if (!personal.apellido_nombre) {
+                alert('Por favor, ingrese el apellido y nombre.');
+                return;
+            }
+            const tempData = JSON.parse(sessionStorage.getItem('personal_om') || '[]');
+            tempData.push(personal);
+            sessionStorage.setItem('personal_om', JSON.stringify(tempData));
+            loadPersonal(personal.parque_id);
+            document.getElementById('personal-form').reset();
+            document.getElementById('personal-form').classList.add('hidden');
+            document.getElementById('add-personal-btn').classList.remove('hidden');
+        });
+
+        // Enviar todos los datos
+        document.getElementById('enviar').addEventListener('click', async () => {
+            const tempData = JSON.parse(sessionStorage.getItem('personal_om') || '[]');
+            if (tempData.length === 0) {
+                alert('No hay datos para enviar.');
+                return;
+            }
+            const response = await fetch('/api/save_data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ vista: 'personal_om', records: tempData })
+            });
+            const result = await response.json();
+            if (response.ok) {
+                sessionStorage.removeItem('personal_om');
+                loadPersonal(sessionStorage.getItem('parque_id'));
+                alert('Datos enviados exitosamente');
+            } else {
+                alert('Error al enviar datos: ' + result.error);
+            }
+        });
+
+        // Navegación
+        document.getElementById('anterior').addEventListener('click', () => {
+            window.location.href = '/';
+        });
+        document.getElementById('siguiente').addEventListener('click', () => {
+            window.location.href = '/partes/generacion';
+        });
+
+        // Logout
+        document.getElementById('logout-button').addEventListener('click', async () => {
+            await fetch('/api/logout', { method: 'POST' });
+            sessionStorage.clear(); // Limpiar todos los datos de sessionStorage
+            window.location.href = '/login';
+        });
+
+        // Cargar datos al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+        });
+    </script>
+</body>
+</html>

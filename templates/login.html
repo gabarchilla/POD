@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Parte Operativo Diario</h1>
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo de la Empresa" style="display: block; margin: 10px auto; max-width: 200px;">
+    </header>
+
+    <h2>Iniciar Sesión</h2>
+
+    <form id="login-form">
+        <label>Usuario</label>
+        <input type="text" id="usuario" required>
+
+        <label>Contraseña</label>
+        <input type="password" id="contrasena" required>
+
+        <button type="button" id="login-btn">Iniciar Sesión</button>
+    </form>
+</body>
+</html>

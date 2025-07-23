@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal O&M</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">  <!-- Asume un CSS si tienes -->
+    <script src="{{ url_for('static', filename='js/personal_om.js') }}"></script>  <!-- JS que agregaremos -->
+</head>
+<body>
+    <header>
+      <h1>Parte Operativo Diario</h1>
+      <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo de la Empresa" style="display: block; margin: 10px auto; max-width: 200px;">  <!-- Ajusta el max-width si es necesario -->
+	  <h2 style="color: #000000; font-family: Arial, sans-serif; text-align: center;"> {{ usuario | title }}</h2>  <!-- Capitalizado y con estilo como h1 -->
+      </select>
+      <button id="logout">Cerrar Sesión</button>
+    </header>
+
+    <h2>Personal O&M</h2>
+
+    <button class="add-btn">+</button>
+    
+    <div class="add-form" style="display: none;">
+        <form id="personal-form">
+            <label>Apellido y Nombre</label>
+            <input type="text" id="apellido_nombre" required>
+            
+            <label>Puesto</label>
+            <select id="puesto" required>
+                <option value="">Seleccione puesto</option>
+                <option value="Operador">Operador</option>
+                <option value="Técnico de mantenimiento">Técnico de mantenimiento</option>
+                <option value="Gestor administrativo">Gestor administrativo</option>
+                <option value="Técnico SSOyA">Técnico SSOyA</option>
+                <option value="Supervisor">Supervisor</option>
+                <option value="Jefe de parque">Jefe de parque</option>
+            </select>
+            
+            <label>Modalidad</label>
+            <input type="text" id="modalidad" required>
+            
+            <label>Inicio</label>
+            <input type="time" id="inicio" required>
+            
+            <label>Fin</label>
+            <input type="time" id="fin" required>
+            
+            <button type="button" class="save-btn">Guardar</button>
+            <button type="button" class="minimize-btn">Minimizar</button>
+        </form>
+    </div>
+
+    <h3>Vista Previa</h3>
+    <table class="preview-table">
+        <thead>
+            <tr>
+                <th>Apellido y Nombre</th>
+                <th>Puesto</th>
+                <th>Modalidad</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Filas se agregan dinámicamente -->
+        </tbody>
+    </table>
+
+    <button class="prev-btn">Anterior</button>
+    <button class="next-btn">Siguiente</button>
+    <button class="send-btn">Enviar</button>
+</body>
+</html>

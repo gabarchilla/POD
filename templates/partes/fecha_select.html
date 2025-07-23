@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar Fecha</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/fecha_select.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Parte Operativo Diario</h1>
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo de la Empresa" style="display: block; margin: 10px auto; max-width: 200px;">
+		<h2 style="color: #000000; font-family: Arial, sans-serif; text-align: center;"> {{ usuario | title }}</h2>  <!-- Capitalizado y con estilo como h1 -->
+        <button id="logout">Cerrar Sesión</button>
+    </header>
+
+    <h2>Ingresar Fecha para Cargar Datos</h2>
+
+    <input type="date" id="fecha-input" required>
+
+    <h3>Vista Previa</h3>
+    <p id="preview-fecha">Fecha seleccionada: Ninguna</p>  <!-- Vista previa actualizada en tiempo real -->
+
+    <button class="next-btn">Siguiente</button>
+</body>
+</html>
